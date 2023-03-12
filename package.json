@@ -8,6 +8,8 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
     "autoprefixer": "^10",
     "postcss": "^8",
     "tailwindcss": "^3",
