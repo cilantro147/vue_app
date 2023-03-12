@@ -11,10 +11,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
-        ref: ${{ github.head_ref }}
+        ref: ${{ github.head_ref }} 
     - name: Install dependencies
       run: npm install
-    - name: Ask questions
+    - name: Run checklist
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: node scripts/checklist.js ${{ github.event.pull_request.head.sha }} ${{ github.event.number }}
+      run:  | 
+      npm install 
+      node src/scripts/checklist.js ${{ github.event.pull_request.head.sha }} ${{ github.event.number }}
