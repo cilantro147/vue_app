@@ -5,7 +5,7 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  ask-questions:
+  checklist:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -13,10 +13,8 @@ jobs:
       with:
         ref: ${{ github.head_ref }} 
     - name: Install dependencies
-      run: npm install
+      run: ls -ltra && npm install
     - name: Run checklist
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      run:  | 
-      npm install 
-      node src/scripts/checklist.js ${{ github.event.pull_request.head.sha }} ${{ github.event.number }}
+      run:  npm run checklist ${{ github.event.pull_request.head.sha }} ${{ github.event.number }}

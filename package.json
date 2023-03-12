@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "vite build",
+    "checklist":"node src/scripts/checklist.js",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "dev": "vite",
     "preview": "vite preview --port 4173"
