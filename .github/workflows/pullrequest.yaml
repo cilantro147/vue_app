@@ -16,5 +16,5 @@ jobs:
       run: ls -ltra && npm install
     - name: Run checklist
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run:  npm run checklist ${{ github.event.pull_request.head.sha }} ${{ github.event.number }}
