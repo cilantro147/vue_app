@@ -1,9 +1,10 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+
 const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
 async function askQuestion(question) {
-  const { data: pullRequest } = await octokit.pulls.get({
+  const { data: pullRequest } = await octokit.rest.pulls.get({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     pull_number: github.context.payload.pull_request.number,
@@ -18,7 +19,7 @@ async function askQuestion(question) {
 
   const newBody = `${body}\n\n${question}`;
 
-  await octokit.pulls.update({
+  await octokit.rest.pulls.update({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     pull_number: github.context.payload.pull_request.number,
@@ -33,10 +34,11 @@ async function run() {
     const sha = process.argv[2];
     const pullNumber = process.argv[3];
 
-    const [_, baseBranch] = (await octokit.pulls.get({
+    const [_, baseBranch] = (await octokit.rest.pulls.get({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       pull_number: pullNumber,
+      sha,
     })).data.base.ref.split('/');
 
     const isMainBranch = baseBranch === 'main';
