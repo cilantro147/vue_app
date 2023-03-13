@@ -60,7 +60,15 @@ const run = async () => {
       pull_number: github.context.payload.pull_request.number,
     });
   
-   console.log({updatedPullRequest})
+   // check if the body has changed
+    if (updatedPullRequest.body !== body) {
+      await octokit.rest.issues.createComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: github.context.payload.pull_request.number,
+        body: 'The pull request body has been updated with the required checklist items.',
+      });
+    }
     
   } catch (error) {
     core.setFailed(error.message);
