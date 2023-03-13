@@ -71,6 +71,23 @@ const run = async () => {
   });
 
   console.log(pullRequest);
+
+  const body = pullRequest.body || '';
+
+  if (body.includes('Have you reviewed your code before sending it for review?')) {
+    console.log(`Skipping question "Have you reviewed your code before sending it for review?", already asked in this pull request`);
+    return;
+  }
+
+  const newBody = `${body}\n\nHave you reviewed your code before sending it for review?`;
+
+  await octokit.rest.pulls.update({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    pull_number: github.context.payload.pull_request.number,
+    body: newBody,
+  });
+
 }
 
 run();
