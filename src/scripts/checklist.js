@@ -65,6 +65,7 @@ const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
 const run = async () => {
   const MainChecks = [
+    `@${pullrequest.user.login}`,
     'Have you reviewed your code before sending it for review?',
     'Did you add a test to the code base?',
     'Have you updated the linear issue with that has changed to make testing easier?',
@@ -114,6 +115,13 @@ const run = async () => {
     repo: github.context.repo.repo,
     pull_number: github.context.payload.pull_request.number,
     body: newBody,
+  });
+
+  // reload the pull request to get the updated body
+  const { data: updatedPullRequest } = await octokit.rest.pulls.get({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    pull_number: github.context.payload.pull_request.number,
   });
 
  console.log({pullRequest})
