@@ -70,7 +70,7 @@ const run = async () => {
     pull_number: github.context.payload.pull_request.number,
   });
   const MainChecks = [
-    `@${pullrequest.user.login}`,
+    `@${pullRequest.user.login}`,
     'Have you reviewed your code before sending it for review?',
     'Did you add a test to the code base?',
     'Have you updated the linear issue with that has changed to make testing easier?',
