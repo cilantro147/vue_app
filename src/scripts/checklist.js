@@ -86,9 +86,11 @@ const run = async () => {
   const body = pullRequest.body || set
  
   const currentBranch = pullRequest.base.ref
-  if(body.has(questions)) {
+  if(body.size === MainChecks.length && currentBranch === 'main') {
      console.log('already asked')
-     return
+     if (body.size === ProductionChecks.length && currentBranch === 'production') {
+      console.log('already asked')
+      return
    }
   
   const newBody = currentBranch === 'main' ? MainChecks.reduce((acc, question) => {
