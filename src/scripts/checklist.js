@@ -92,6 +92,7 @@ const run = async () => {
       console.log('already asked')
       return
    }
+  }
   
   const newBody = currentBranch === 'main' ? MainChecks.reduce((acc, question) => {
     if(!body.has(question)) {
