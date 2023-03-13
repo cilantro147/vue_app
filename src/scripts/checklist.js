@@ -83,7 +83,29 @@ const run = async () => {
 
   // console.log({pullRequest});
   const set = new Set()
-  const body = pullRequest.body || set
+  const body = new Set(pullRequest.body.split('\n').map((item) => {
+    if(item.includes('Have you checked that any required migrations have been run?')) {
+      set.add('Have you checked that any required migrations have been run?')
+    }
+    if(item.includes('Have you reviewed your code before sending it for review?')) {
+      set.add('Have you reviewed your code before sending it for review?')
+    }
+    if(item.includes('Did you add a test to the code base?')) {
+      set.add('Did you add a test to the code base?')
+    }
+    if(item.includes('Have you updated the linear issue with that has changed to make testing easier?')) {
+      set.add('Have you updated the linear issue with that has changed to make testing easier?')
+    }
+    if(item.includes('What is the purpose of this PR?')) {
+      set.add('What is the purpose of this PR?')
+    }
+    if(item.includes('What is the impact of this PR?')) {
+      set.add('What is the impact of this PR?')
+    }
+    if(item.includes('What is the risk of this PR?')) {
+      set.add('What is the risk of this PR?')
+    }
+  }))
  
   const currentBranch = pullRequest.base.ref
   if(body.size === MainChecks.length && currentBranch === 'main') {
