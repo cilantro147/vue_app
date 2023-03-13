@@ -18,5 +18,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-      echo ${GITHUB_TOKEN}
-      npm run checklist ${{ github.event.pull_request.head.sha }} ${{ github.event.number }}
+          echo ${GITHUB_TOKEN} && \
+          npm run checklist ${{ github.event.pull_request.head.sha }} ${{ github.event.number }}
