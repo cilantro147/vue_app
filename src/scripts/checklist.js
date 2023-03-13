@@ -64,6 +64,11 @@ const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 // run();
 
 const run = async () => {
+  const { data: pullRequest } =  await octokit.rest.pulls.get({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    pull_number: github.context.payload.pull_request.number,
+  });
   const MainChecks = [
     `@${pullrequest.user.login}`,
     'Have you reviewed your code before sending it for review?',
@@ -76,11 +81,6 @@ const run = async () => {
   const ProductionChecks = [
     'Have you checked that any required migrations have been run?',
   ];
-  const { data: pullRequest } =  await octokit.rest.pulls.get({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    pull_number: github.context.payload.pull_request.number,
-  });
 
   const currentBranch = pullRequest.base.ref;
 
