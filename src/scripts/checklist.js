@@ -70,7 +70,7 @@ const run = async () => {
     pull_number: github.context.payload.pull_request.number,
   });
 
-  console.log(pullRequest);
+  console.log({pullRequest});
 
   const body = pullRequest.body || '';
 
@@ -87,6 +87,8 @@ const run = async () => {
     pull_number: github.context.payload.pull_request.number,
     body: newBody,
   });
+
+ console.log({pullRequest})
 
 }
 
