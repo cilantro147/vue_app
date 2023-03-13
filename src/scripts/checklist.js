@@ -27,6 +27,7 @@ async function askQuestion(question) {
   });
 
   console.log(`Asked question "${question}"`);
+  console.log(`New body: ${newBody}`);
 }
 
 async function run() {
