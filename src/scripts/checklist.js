@@ -64,6 +64,17 @@ const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 // run();
 
 const run = async () => {
+  const MainChecks = [
+    'Have you reviewed your code before sending it for review?',
+    'Did you add a test to the code base?',
+    'Have you updated the linear issue with that has changed to make testing easier?',
+    'What is the purpose of this PR?',
+    'What is the impact of this PR?',
+  ];
+
+  const ProductionChecks = [
+    'Have you checked that any required migrations have been run?',
+  ];
   const { data: pullRequest } =  await octokit.rest.pulls.get({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
@@ -71,15 +82,30 @@ const run = async () => {
   });
 
   // console.log({pullRequest});
+  const set = new Set()
+  const body = pullRequest.body || set
+ 
+  const currentBranch = pullRequest.base.ref
+  if(body.has(questions)) {
+     console.log('already asked')
+     return
+   }
+  
+  const newBody = currentBranch === 'main' ? MainChecks.reduce((acc, question) => {
+    if(!body.has(question)) {
+      acc += `\n\n${question}`
+    }
+    return acc
+  }, body) : ProductionChecks.reduce((acc, question) => {
+    if(!body.has(question)) {
+      acc += `\n\n${question}`
+    }
+    return acc
+  }, body)
 
-  const body = pullRequest.body || '';
 
-  if (body.includes('Have you reviewed your code before sending it for review?')) {
-    console.log(`Skipping question "Have you reviewed your code before sending it for review?", already asked in this pull request`);
-    return;
-  }
 
-  const newBody = `${body}\n\nHave you reviewed your code before sending it for review?`;
+
 
   await octokit.rest.pulls.update({
     owner: github.context.repo.owner,
