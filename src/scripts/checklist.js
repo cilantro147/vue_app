@@ -10,16 +10,12 @@ const run = async () => {
       pull_number: github.context.payload.pull_request.number,
     });
     const MainChecks = [
-      `@${pullRequest.user.login}`,
       'Have you reviewed your code before sending it for review?',
       'Did you add a test to the code base?',
-      'Have you updated the linear issue with that has changed to make testing easier?',
-      'What is the purpose of this PR?',
-      'What is the impact of this PR?',
+      'Have you updated the linear issue with what has changed to make testing easier?',
     ];
   
     const ProductionChecks = [
-      `@${pullRequest.user.login}`,
       'Have you checked that any required migrations have been run?',
     ];
   
@@ -35,13 +31,15 @@ const run = async () => {
     if (isMainBranch) {
       MainChecks.forEach((check) => {
         if (!body.includes(check)) {
-          newBody = `${newBody}\n\n${check}`;
+          // newBody = `${newBody}\n\n${check}`;
+          // make it checkable
+          newBody = `${newBody}\n\n- [ ] ${check}`;
         }
       });
     } else if (isProductionBranch) {
       ProductionChecks.forEach((check) => {
         if (!body.includes(check)) {
-          newBody = `${newBody}\n\n${check}`;
+          newBody = `${newBody}\n\n- [ ] ${check}`;
         }
       });
   
