@@ -19,6 +19,7 @@ const run = async () => {
     ];
   
     const ProductionChecks = [
+      `@${pullRequest.user.login}`,
       'Have you checked that any required migrations have been run?',
     ];
   
@@ -52,32 +53,38 @@ const run = async () => {
       pull_number: github.context.payload.pull_request.number,
       body: newBody,
     });
-  
-    // reload the pull request to get the updated body
-    const { data: updatedPullRequest } = await octokit.rest.pulls.get({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      pull_number: github.context.payload.pull_request.number,
-    });
-  
-   // check if the body has changed
-    if (updatedPullRequest.body !== body) {
-      await octokit.rest.issues.createComment({
+        await octokit.rest.issues.createComment({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         issue_number: github.context.payload.pull_request.number,
-        body: 'The pull request body has been updated with the required checklist items.',
+        body: newBody,
       });
-    }
-      else {
-        await octokit.rest.issues.createComment({
-          owner: github.context.repo.owner,
-          repo: github.context.repo.repo,
-          issue_number: github.context.payload.pull_request.number,
-          body: 'The pull request body is up to date.',
-        });
+  
+    // reload the pull request to get the updated body
+    // const { data: updatedPullRequest } = await octokit.rest.pulls.get({
+    //   owner: github.context.repo.owner,
+    //   repo: github.context.repo.repo,
+    //   pull_number: github.context.payload.pull_request.number,
+    // });
+  
+   // check if the body has changed
+    // if (updatedPullRequest.body !== body) {
+    //   await octokit.rest.issues.createComment({
+    //     owner: github.context.repo.owner,
+    //     repo: github.context.repo.repo,
+    //     issue_number: github.context.payload.pull_request.number,
+    //     body: 'The pull request body has been updated with the required checklist items.',
+    //   });
+    // }
+    //   else {
+    //     await octokit.rest.issues.createComment({
+    //       owner: github.context.repo.owner,
+    //       repo: github.context.repo.repo,
+    //       issue_number: github.context.payload.pull_request.number,
+    //       body: 'The pull request body is up to date.',
+    //     });
 
-    }
+    // }
     
   } catch (error) {
     core.setFailed(error.message);
