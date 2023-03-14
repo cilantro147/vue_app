@@ -31,8 +31,6 @@ const run = async () => {
     if (isMainBranch) {
       MainChecks.forEach((check) => {
         if (!body.includes(check)) {
-          // newBody = `${newBody}\n\n${check}`;
-          // make it checkable
           newBody = `${newBody}\n\n- [ ] ${check}`;
         }
       });
