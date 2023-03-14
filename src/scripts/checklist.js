@@ -46,13 +46,6 @@ const run = async () => {
       });
   
     }
-  
-    await octokit.rest.pulls.update({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      pull_number: github.context.payload.pull_request.number,
-      body: newBody,
-    });
         await octokit.rest.issues.createComment({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
@@ -60,32 +53,26 @@ const run = async () => {
         body: newBody,
       });
   
-    // reload the pull request to get the updated body
-    // const { data: updatedPullRequest } = await octokit.rest.pulls.get({
-    //   owner: github.context.repo.owner,
-    //   repo: github.context.repo.repo,
-    //   pull_number: github.context.payload.pull_request.number,
-    // });
-  
-   // check if the body has changed
-    // if (updatedPullRequest.body !== body) {
-    //   await octokit.rest.issues.createComment({
-    //     owner: github.context.repo.owner,
-    //     repo: github.context.repo.repo,
-    //     issue_number: github.context.payload.pull_request.number,
-    //     body: 'The pull request body has been updated with the required checklist items.',
-    //   });
-    // }
-    //   else {
-    //     await octokit.rest.issues.createComment({
-    //       owner: github.context.repo.owner,
-    //       repo: github.context.repo.repo,
-    //       issue_number: github.context.payload.pull_request.number,
-    //       body: 'The pull request body is up to date.',
-    //     });
+    // check that the created comment is the same as the new body 
+    // if not, update the comment
+    const { data: comments } = await octokit.rest.issues.listComments({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      issue_number: github.context.payload.pull_request.number,
+    });
+  console.log({comments})
+    const checklistComment = comments.find((comment) => comment.body === newBody);
+    if (checklistComment) {
+      await octokit.rest.issues.updateComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        comment_id: checklistComment.id,
+        body: newBody,
+      });
+    }
 
-    // }
     
+
   } catch (error) {
     core.setFailed(error.message);
   }
