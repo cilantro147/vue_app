@@ -4,6 +4,8 @@ const github = require('@actions/github');
 const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 const run = async () => {
   try {
+    const context = github.context;
+    console.log({context});
     const { data: pullRequest } =  await octokit.rest.pulls.get({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
