@@ -53,25 +53,15 @@ const run = async () => {
         body: newBody,
       });
   
-    // check that the created comment is the same as the new body 
-    // if not, update the comment
-    const { data: comments } = await octokit.rest.issues.listComments({
+    const review = await octokit.rest.pulls.createReview({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
-      issue_number: github.context.payload.pull_request.number,
+      pull_number: github.context.payload.pull_request.number,
+      body: newBody,
+      event: 'COMMENT',
     });
-  console.log({comments})
-    const checklistComment = comments.find((comment) => comment.body === newBody);
-    if (checklistComment) {
-      await octokit.rest.issues.updateComment({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
-        comment_id: checklistComment.id,
-        body: newBody,
-      });
-    }
 
-    
+
 
   } catch (error) {
     core.setFailed(error.message);
