@@ -51,14 +51,15 @@ const run = async () => {
         repo: github.context.repo.repo,
         issue_number: github.context.payload.pull_request.number,
         body: newBody,
+        event: 'COMMENT',
       });
   
-    const review = await octokit.rest.pulls.createReview({
+      await octokit.rest.pulls.createReview({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       pull_number: github.context.payload.pull_request.number,
-      body: newBody,
-      event: 'COMMENT',
+      body: `@${pullRequest.user.login} Please review the checklist and make sure you have completed all the steps`,
+      event: 'REQUEST_CHANGES',
     });
 
 
